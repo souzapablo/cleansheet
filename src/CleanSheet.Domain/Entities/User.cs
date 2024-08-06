@@ -1,13 +1,18 @@
 ﻿using CleanSheet.Domain.Abstractions;
 
 namespace CleanSheet.Domain.Entities;
-public class User(
-    string username,
-    string password) : Entity
+public class User : Entity
 {
     private readonly List<Career> _careers = [];
 
-    public string Username { get; private set; } = username;
-    public string Password { get; private set; } = password;
+    protected User() { }
+    public User(string username, string password)
+    {
+        Username = username;
+        Password = password;
+    }
+
+    public string Username { get; private set; } = string.Empty;
+    public string Password { get; private set; } = string.Empty;
     public IReadOnlyCollection<Career> Careers => _careers;
 }
