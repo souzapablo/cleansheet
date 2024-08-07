@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using CleanSheet.Domain.Repositories;
+using CleanSheet.Infrastructure.Repositories;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -9,6 +11,7 @@ public static class DependencyInjection
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddDbContext(configuration);
+        services.AddRepositories();
 
         return services;
     }
@@ -19,5 +22,10 @@ public static class DependencyInjection
 
         services.AddDbContext<CleanSheetDbContext>(options =>
             options.UseNpgsql(connectionString));
+    }
+
+    private static void AddRepositories(this IServiceCollection services)
+    {
+        services.AddScoped<IUserRepository, UserRepository>();
     }
 }
