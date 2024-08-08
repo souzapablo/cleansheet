@@ -13,7 +13,7 @@ public class CreateUserCommandHandler(
     {
         var user = await userRepository.GetByUsernameAsync(request.Username, cancellationToken);
 
-        if (user is null)
+        if (user is not null)
             return Result.Failure<long>(UserErrors.EmailAlreadyRegistered);
 
         var passwordHash = Encryption.HashPassword(request.Password);

@@ -1,6 +1,6 @@
 using CleanSheet.Application;
 using CleanSheet.Infrastructure;
-using CleanSheet.Presentation;
+using CleanSheet.Presentation.Endpoints;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,8 +10,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services
     .AddApplication()
-    .AddInfrastructure(builder.Configuration)
-    .AddPresentation();
+    .AddInfrastructure(builder.Configuration);
 
 builder.Host
     .UseSerilog((context, configuration) =>
@@ -28,5 +27,5 @@ if (app.Environment.IsDevelopment())
 app.UseSerilogRequestLogging();
 
 app.UseHttpsRedirection();
-
+app.MapEndpoints();
 app.Run();
