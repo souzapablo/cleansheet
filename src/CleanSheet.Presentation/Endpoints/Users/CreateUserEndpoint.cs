@@ -1,5 +1,6 @@
 ﻿using CleanSheet.Application.Features.Users.Commands.Create;
 using CleanSheet.Presentation.Abstractions;
+using CleanSheet.Presentation.Extensions;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
@@ -18,6 +19,6 @@ public class CreateUserEndpoint : IEndpoint
         var result = await sender.Send(request.ToCommand());
         return result.IsSuccess 
             ? TypedResults.Created($"api/v1/users/{result.Value}", result)
-            : TypedResults.BadRequest(result);
+            : result.HandleFailure();
     }
 }
