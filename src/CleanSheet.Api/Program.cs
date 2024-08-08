@@ -1,3 +1,4 @@
+using CleanSheet.Api.Infrastructure;
 using CleanSheet.Application;
 using CleanSheet.Infrastructure;
 using CleanSheet.Presentation.Endpoints;
@@ -16,6 +17,9 @@ builder.Host
     .UseSerilog((context, configuration) =>
         configuration.ReadFrom.Configuration(context.Configuration));
 
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+builder.Services.AddProblemDetails();
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -27,5 +31,8 @@ if (app.Environment.IsDevelopment())
 app.UseSerilogRequestLogging();
 
 app.UseHttpsRedirection();
+
+app.UseExceptionHandler();
+
 app.MapEndpoints();
 app.Run();
