@@ -3,7 +3,8 @@ using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace CleanSheet.IntegrationTests;
-public class BaseIntegrationTest : IClassFixture<IntegrationTestWebAppFactory>
+public class BaseIntegrationTest 
+    : IClassFixture<IntegrationTestWebAppFactory>
 {
     private readonly IServiceScope _scope;
     protected readonly ISender Sender;
