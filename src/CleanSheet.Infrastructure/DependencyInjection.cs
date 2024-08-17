@@ -1,5 +1,7 @@
-﻿using CleanSheet.Domain.Repositories;
+﻿using CleanSheet.Domain.Abstractions;
+using CleanSheet.Domain.Repositories;
 using CleanSheet.Infrastructure.Repositories;
+using CleanSheet.Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,7 +14,7 @@ public static class DependencyInjection
     {
         services.AddDbContext(configuration);
         services.AddRepositories();
-
+        services.AddSecurity();
         return services;
     }
 
@@ -27,5 +29,10 @@ public static class DependencyInjection
     private static void AddRepositories(this IServiceCollection services)
     {
         services.AddScoped<IUserRepository, UserRepository>();
+    }
+
+    private static void AddSecurity(this IServiceCollection services)
+    {
+        services.AddScoped<IPasswordHasher, PasswordHasher>();
     }
 }

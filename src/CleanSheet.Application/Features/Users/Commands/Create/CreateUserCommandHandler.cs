@@ -3,11 +3,11 @@ using CleanSheet.Domain.Entities;
 using CleanSheet.Domain.Errors;
 using CleanSheet.Domain.Repositories;
 using MediatR;
-using Encryption = BCrypt.Net.BCrypt;
 
 namespace CleanSheet.Application.Features.Users.Commands.Create;
 public class CreateUserCommandHandler(
-    IUserRepository userRepository) : IRequestHandler<CreateUserCommand, Result<long>>
+    IUserRepository userRepository,
+    IPasswordHasher passwordHasher) : IRequestHandler<CreateUserCommand, Result<long>>
 {
     public async Task<Result<long>> Handle(CreateUserCommand request, CancellationToken cancellationToken)
     {
@@ -16,7 +16,7 @@ public class CreateUserCommandHandler(
         if (user is not null)
             return Result.Failure<long>(UserErrors.EmailAlreadyRegistered);
 
-        var passwordHash = Encryption.HashPassword(request.Password);
+        var passwordHash = passwordHasher.Hash(request.Password);
 
         var newUser = new User(request.Username, passwordHash);
 
