@@ -15,4 +15,7 @@ public class User : Entity
     public string Username { get; private set; } = string.Empty;
     public string Password { get; private set; } = string.Empty;
     public IReadOnlyCollection<Career> Careers => _careers;
+
+    public void AddCareer(Career career) =>
+        _careers.Add(career);
 }

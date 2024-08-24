@@ -15,4 +15,8 @@ public class UserRepository(
         await context.Users.AddAsync(newUser, cancellationToken);
         await context.SaveChangesAsync();
     }
+
+    public async Task<User?> GetByIdAsync(long userId, CancellationToken cancellationToken) =>
+        await context.Users
+            .SingleOrDefaultAsync(u => u.Id == userId, cancellationToken: cancellationToken);
 }
