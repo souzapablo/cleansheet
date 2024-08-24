@@ -7,8 +7,17 @@ internal class CareerConfiguration : IEntityTypeConfiguration<Career>
 {
     public void Configure(EntityTypeBuilder<Career> builder)
     {
-        builder.Property(x => x.Manager)
-            .HasColumnType("varchar(80)")
-            .IsRequired();
+        builder.OwnsOne(typeof(Manager), "Manager", m =>
+        {
+            m.Property<string>("FirstName")
+                .HasColumnName("ManagerFirstName")
+                .HasColumnType("varchar(12)")
+                .IsRequired();
+
+            m.Property<string>("LastName")
+                .HasColumnName("ManagerLastName")
+                .HasColumnType("varchar(12)")
+                .IsRequired();
+        });
     }
 }

@@ -5,7 +5,10 @@ public class CreateCareerCommandValidator : AbstractValidator<CreateCareerComman
 {
     public CreateCareerCommandValidator()
     {
-        RuleFor(x => x.Manager)
-            .Length(2, 12).WithMessage("Manager fisrt name must be between 2 and 12 characters.");
+        RuleFor(x => x.ManagerFirstName)
+            .Length(2, 12).WithMessage("Manager first name must be between 2 and 12 characters.");
+
+        RuleFor(x => x.ManagerLastName)
+            .Length(2, 12).WithMessage("Manager last name must be between 2 and 12 characters.");
     }
 }

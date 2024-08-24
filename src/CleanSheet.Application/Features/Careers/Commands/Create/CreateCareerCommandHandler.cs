@@ -16,7 +16,7 @@ public class CreateCareerCommandHandler(
         if (user is null)
             return Result.Failure<long>(UserErrors.UserNotFound);
 
-        var career = new Career(request.Manager);
+        var career = new Career(new Manager(request.ManagerFirstName, request.ManagerLastName));
 
         user.AddCareer(career);
 

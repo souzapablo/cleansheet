@@ -8,12 +8,14 @@ namespace CleanSheet.IntegrationTests.Career;
 public class CreateCareerTests(IntegrationTestWebAppFactory factory)
     : BaseIntegrationTest(factory)
 {
-    [Fact(DisplayName = "Create should add a new career to database")]
-    public async Task Create_ShouldAdd_NewCareerToDatabase()
+    [Theory(DisplayName = "Create should add a new career to database")]
+    [InlineData("123456789123@manager.com", "123456789123", "Manager")]
+    [InlineData("mister123456789123@manager.com", "Mister", "123456789123")]
+    public async Task Create_ShouldAdd_NewCareerToDatabase(string email, string firstName, string lastName)
     {
         // Arrange
-        var user = await Sender.Send(new CreateUserCommand("create@manager.com", "Creating@n3wmanager"));
-        var command = new CreateCareerCommand(user.Value, "Manager");
+        var user = await Sender.Send(new CreateUserCommand(email, "Creating@n3wmanager"));
+        var command = new CreateCareerCommand(user.Value, firstName, lastName);
 
         // Act
         var result = await Sender.Send(command);
@@ -25,13 +27,15 @@ public class CreateCareerTests(IntegrationTestWebAppFactory factory)
     }
 
     [Theory(DisplayName = "Create should return error given invalid input")]
-    [InlineData("create@manager2.com", "m")]
-    [InlineData("create@manager3.com", "manager input is too long and career will not be created")]
-    public async Task Create_ShouldReturnError_GivenInvalidInput(string email, string manager)
+    [InlineData("mm@manager.com", "m", "m")]
+    [InlineData("misterm@manager.com", "mister", "m")]
+    [InlineData("marvellouslydmanager@manager.com", "marvellouslyd", "manager")]
+    [InlineData("mistermanagermanager@manager.com", "mister", "managermanager")]
+    public async Task Create_ShouldReturnError_GivenInvalidInput(string email, string firstName, string lastName)
     {
         // Arrange
         var user = await Sender.Send(new CreateUserCommand(email, "Creating@n3wmanager"));
-        var command = new CreateCareerCommand(user.Value, manager);
+        var command = new CreateCareerCommand(user.Value, firstName, lastName);
 
         // Act
         var result = await Sender.Send(command);
@@ -46,7 +50,7 @@ public class CreateCareerTests(IntegrationTestWebAppFactory factory)
     public async Task Create_ShouldReturn_UserNotFound_GivenUserNotFound()
     {
         // Arrange
-        var command = new CreateCareerCommand(-1, "Manager");
+        var command = new CreateCareerCommand(-1, "Mister", "Manager");
 
         // Act
         var result = await Sender.Send(command);

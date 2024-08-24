@@ -3,6 +3,7 @@ using System;
 using CleanSheet.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CleanSheet.Infrastructure.Migrations
 {
     [DbContext(typeof(CleanSheetDbContext))]
-    partial class CleanSheetDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240824101027_IncludeManagerObjectIntoCareer")]
+    partial class IncludeManagerObjectIntoCareer
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
