@@ -1,4 +1,5 @@
 ﻿using CleanSheet.Presentation.Abstractions;
+using CleanSheet.Presentation.Endpoints.Careers;
 using CleanSheet.Presentation.Endpoints.Users;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
@@ -19,8 +20,13 @@ public static class Endpoint
         endpoints.MapGroup("v1/users")
             .WithTags("Users")
             .MapEndpoint<CreateUserEndpoint>();
+
+        endpoints.MapGroup("v1/careers")
+            .WithTags("Careers")
+            .MapEndpoint<CreateCareerEndpoint>();
     }
-        private static IEndpointRouteBuilder MapEndpoint<TEndpoint>(this IEndpointRouteBuilder app)
+    
+    private static IEndpointRouteBuilder MapEndpoint<TEndpoint>(this IEndpointRouteBuilder app)
     where TEndpoint : IEndpoint
     {
         TEndpoint.Map(app);
