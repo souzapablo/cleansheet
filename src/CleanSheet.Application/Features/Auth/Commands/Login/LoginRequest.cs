@@ -1,6 +1,4 @@
-﻿using MediatR;
-
-namespace CleanSheet.Application.Features.Auth.Commands.Login;
+﻿namespace CleanSheet.Application.Features.Auth.Commands.Login;
 
 public record LoginRequest(
     string Username,

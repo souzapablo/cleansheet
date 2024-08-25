@@ -2,10 +2,8 @@ using CleanSheet.Api.Infrastructure;
 using CleanSheet.Api.OptionsSetup;
 using CleanSheet.Application;
 using CleanSheet.Infrastructure;
-using CleanSheet.Infrastructure.Authentication;
 using CleanSheet.Presentation.Endpoints;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using Serilog;
 

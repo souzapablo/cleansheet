@@ -6,6 +6,7 @@ using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
+using System.Security.Claims;
 
 namespace CleanSheet.Presentation.Endpoints.Careers;
 internal class CreateCareerEndpoint : IEndpoint
@@ -21,9 +22,14 @@ internal class CreateCareerEndpoint : IEndpoint
 
     private static async Task<IResult> HandleAsync(
         ISender sender,
+        ClaimsPrincipal claims,
         CreateCareerRequest request)
     {
-        var result = await sender.Send(request.ToCommand());
+        long.TryParse(claims.Claims
+            .FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?
+            .Value, out var userId);
+
+        var result = await sender.Send(request.ToCommand(userId));
         return result.IsSuccess
             ? TypedResults.Created($"api/v1/careers/{result.Value}", result)
             : result.HandleFailure();
