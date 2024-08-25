@@ -1,4 +1,5 @@
 ﻿using CleanSheet.Presentation.Abstractions;
+using CleanSheet.Presentation.Endpoints.Auth;
 using CleanSheet.Presentation.Endpoints.Careers;
 using CleanSheet.Presentation.Endpoints.Users;
 using Microsoft.AspNetCore.Builder;
@@ -23,7 +24,12 @@ public static class Endpoint
 
         endpoints.MapGroup("v1/careers")
             .WithTags("Careers")
+            .RequireAuthorization()
             .MapEndpoint<CreateCareerEndpoint>();
+
+        endpoints.MapGroup("v1/auth")
+            .WithTags("Auth")
+            .MapEndpoint<LoginEndpoint>();
     }
     
     private static IEndpointRouteBuilder MapEndpoint<TEndpoint>(this IEndpointRouteBuilder app)

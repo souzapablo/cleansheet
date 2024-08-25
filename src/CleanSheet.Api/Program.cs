@@ -1,7 +1,11 @@
 using CleanSheet.Api.Infrastructure;
+using CleanSheet.Api.OptionsSetup;
 using CleanSheet.Application;
 using CleanSheet.Infrastructure;
+using CleanSheet.Infrastructure.Authentication;
 using CleanSheet.Presentation.Endpoints;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using Serilog;
 
@@ -22,11 +26,49 @@ builder.Services.AddSwaggerGen(x =>
             Url = new Uri("https://github.com/souzapablo/")
         }
     });
+
+    x.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        Type = SecuritySchemeType.ApiKey,
+        Scheme = "Bearer",
+        BearerFormat = "JWT",
+        In = ParameterLocation.Header,
+        Description = "JWT Authorization header with Bearer scheme."
+    });
+
+    x.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+                {
+                    Reference = new OpenApiReference
+                    {
+                        Type = ReferenceType.SecurityScheme,
+                        Id = "Bearer"
+                    }
+                },
+            Array.Empty<string>()
+        }
+    });
 });
+
+builder.Services
+    .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer();
+
+builder.Services
+    .AddAuthorization();
 
 builder.Services
     .AddApplication()
     .AddInfrastructure(builder.Configuration);
+
+builder.Services
+    .ConfigureOptions<JwtOptionsSetup>();
+
+builder.Services
+    .ConfigureOptions<JwtBearerOptionsSetup>();
 
 builder.Host
     .UseSerilog((context, configuration) =>
@@ -46,6 +88,10 @@ if (app.Environment.IsDevelopment())
 app.UseSerilogRequestLogging();
 
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
+
+app.UseAuthorization();
 
 app.UseExceptionHandler();
 

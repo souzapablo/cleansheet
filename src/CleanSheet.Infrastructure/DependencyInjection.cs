@@ -1,5 +1,7 @@
-﻿using CleanSheet.Domain.Abstractions;
+﻿using CleanSheet.Application.Abstractions;
+using CleanSheet.Domain.Abstractions;
 using CleanSheet.Domain.Repositories;
+using CleanSheet.Infrastructure.Authentication;
 using CleanSheet.Infrastructure.Repositories;
 using CleanSheet.Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
@@ -35,5 +37,6 @@ public static class DependencyInjection
     private static void AddSecurity(this IServiceCollection services)
     {
         services.AddScoped<IPasswordHasher, PasswordHasher>();
+        services.AddScoped<IJwtProvider, JwtProvider>();
     }
 }
