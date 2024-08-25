@@ -11,7 +11,7 @@ public class Career : Entity
         Manager = manager;
     }
 
-    public Manager Manager { get; private set; }
+    public Manager Manager { get; private set; } = null!;
     public DateTime LastUpdate { get; private set; } = DateTime.UtcNow;
     public long UserId { get; private set; }
     public User User { get; private set; } = null!;
