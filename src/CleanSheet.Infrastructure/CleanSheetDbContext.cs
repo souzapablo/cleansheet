@@ -9,6 +9,7 @@ public class CleanSheetDbContext(
     public DbSet<Career> Careers { get; set; }
     public DbSet<Team> Teams { get; set; }
     public DbSet<Player> Players { get; set; }
+    public DbSet<InitialTeam> InitialTeams { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
