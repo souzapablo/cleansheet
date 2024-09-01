@@ -23,6 +23,6 @@ public class LoginCommandHandler(
 
         var token = jwtProvider.Generate(user);
 
-        return Result.Success(new LoginResponse(token));
+        return new LoginResponse(token);
     }
 }

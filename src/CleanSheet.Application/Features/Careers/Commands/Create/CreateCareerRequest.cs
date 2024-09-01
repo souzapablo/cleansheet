@@ -2,8 +2,9 @@
 
 public record CreateCareerRequest(
     string ManagerFirstName,
-    string ManagerLastName)
+    string ManagerLastName, 
+    string InitialTeam)
 {
     public CreateCareerCommand ToCommand(long userId) =>
-        new(userId, ManagerFirstName, ManagerLastName);
+        new(userId, ManagerFirstName, ManagerLastName, InitialTeam);
 };

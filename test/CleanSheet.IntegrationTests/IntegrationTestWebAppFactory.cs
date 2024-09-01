@@ -1,4 +1,6 @@
-﻿using CleanSheet.Infrastructure;
+﻿using CleanSheet.Domain.Entities;
+using CleanSheet.Domain.Enums;
+using CleanSheet.Infrastructure;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
@@ -22,6 +24,7 @@ public class IntegrationTestWebAppFactory : WebApplicationFactory<Program>, IAsy
         using var scope = Services.CreateScope();
         var dbContext = scope.ServiceProvider.GetRequiredService<CleanSheetDbContext>();
         await dbContext.Database.MigrateAsync();
+        await SeedDatabaseAsync(dbContext);
     }
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
@@ -47,5 +50,26 @@ public class IntegrationTestWebAppFactory : WebApplicationFactory<Program>, IAsy
     Task IAsyncLifetime.DisposeAsync()
     {
         return _dbContainer.StopAsync();
+    }
+
+    private static async Task SeedDatabaseAsync(CleanSheetDbContext dbContext)
+    {
+        if (!dbContext.InitialTeams.Any())
+        {
+            dbContext.InitialTeams.AddRange(new InitialTeam("test-team", "Test Team Arena", "Test Team",
+            [
+                new("Test Player 1", 1, 80, new DateOnly(2000, 09, 12), PlayerPosition.Gk),
+                new("Test Player 1", 10, 99, new DateOnly(1980, 12, 12), PlayerPosition.Cam),
+                new("Test Player 1", 11, 80, new DateOnly(2004, 05, 15), PlayerPosition.St),
+            ]),
+            new InitialTeam("empty-test-team", "Empty Test Team Arena", "Empty Test Team", []));
+        }
+
+        if (!dbContext.Users.Any())
+        {
+            dbContext.Users.Add(new User("test@user.com", "Test@1234"));
+        }
+
+        await dbContext.SaveChangesAsync();
     }
 }

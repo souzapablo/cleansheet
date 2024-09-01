@@ -16,6 +16,13 @@ class InitialTeamConfiguration : IEntityTypeConfiguration<InitialTeam>
             .HasColumnType("varchar(80)")
             .IsRequired();
 
+        builder.Property(x => x.Slug)
+            .HasColumnType("varchar(80)")
+            .IsRequired();
+
+        builder.HasIndex(x => x.Slug)
+            .IsUnique();
+
         builder.OwnsMany(x => x.InitialSquad, sa =>
         {
             sa.ToJson();

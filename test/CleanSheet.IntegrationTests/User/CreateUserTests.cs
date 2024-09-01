@@ -18,7 +18,7 @@ public class CreateUserTests(IntegrationTestWebAppFactory factory)
 
         // Assert
         result.IsSuccess.Should().BeTrue();
-        result.Error.Should().BeNull(); 
+        result.Error.Should().Be(Error.None);
         result.Value.Should().BeGreaterThan(0);
     }
 
@@ -34,25 +34,22 @@ public class CreateUserTests(IntegrationTestWebAppFactory factory)
         var result = await Sender.Send(command);
 
         // Assert
-        result.IsSuccess.Should().BeFalse();
+        result.IsFailure.Should().BeTrue();
         result.Error.Should().Be(IValidationResult.ValidationError);
-        result.Value.Should().Be(default);
     }
 
     [Fact(DisplayName = "Create should return error given already registered e-mail")]
     public async Task Create_ShouldReturnError_GivenAlreadyRegisteredEmail()
     {
         // Arrange
-        var command = new CreateUserCommand("test@newuser.com", "Creating@n3wuser");
-        await Sender.Send(command);
+        var command = new CreateUserCommand("test@user.com", "Creating@n3wuser");
 
         // Act
         var result = await Sender.Send(command);
 
         // Assert
-        result.IsSuccess.Should().BeFalse();
+        result.IsFailure.Should().BeTrue();
         result.Error.Should().Be(UserErrors.EmailAlreadyRegistered);
-        result.Value.Should().Be(default);
     }
 }
  

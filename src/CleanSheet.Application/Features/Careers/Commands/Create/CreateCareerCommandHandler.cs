@@ -7,21 +7,33 @@ using MediatR;
 namespace CleanSheet.Application.Features.Careers.Commands.Create;
 public class CreateCareerCommandHandler(
     ICareerRepository careerRepository,
-    IUserRepository userRepository) : IRequestHandler<CreateCareerCommand, Result<long>>
+    IUserRepository userRepository,
+    IInitialTeamRepository initialTeamRepository) : IRequestHandler<CreateCareerCommand, Result<long>>
 {
     public async Task<Result<long>> Handle(CreateCareerCommand request, CancellationToken cancellationToken)
     {
         var user = await userRepository.GetByIdAsync(request.UserId, cancellationToken);
 
         if (user is null)
-            return Result.Failure<long>(UserErrors.UserNotFound);
+            return Result.Failure<long>(UserErrors.NotFound);
 
-        var career = new Career(new Manager(request.ManagerFirstName, request.ManagerLastName));
+        var initialTeam = await initialTeamRepository
+            .GetBySlugAsync(request.InitialTeam, cancellationToken);
 
-        user.AddCareer(career);
+        if (initialTeam is null)
+            return Result.Failure<long>(InitialTeamErrors.NotFound);
 
-        await careerRepository.AddAsync(career, cancellationToken);
+        var manager = new Manager(request.ManagerFirstName, request.ManagerLastName);
 
-        return Result.Success(career.Id);
+        var newCareerResult = Career.Create(manager, initialTeam);
+
+        if (!newCareerResult.IsSuccess)
+            return Result.Failure<long>(newCareerResult.Error);
+
+        user.AddCareer(newCareerResult.Value);
+
+        await careerRepository.AddAsync(newCareerResult.Value, cancellationToken);
+
+        return newCareerResult.Value.Id;
     }
 }

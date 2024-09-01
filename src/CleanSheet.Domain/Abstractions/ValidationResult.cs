@@ -13,7 +13,7 @@ public sealed record ValidationResult : Result, IValidationResult
 public sealed record ValidationResult<TValue> : Result<TValue>, IValidationResult
 {
     private ValidationResult(Error[] errors)
-        : base(false, IValidationResult.ValidationError) =>
+        : base(default, false, IValidationResult.ValidationError) =>
         Errors = errors;
 
     public Error[] Errors { get; }

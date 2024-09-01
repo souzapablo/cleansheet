@@ -22,6 +22,6 @@ public class CreateUserCommandHandler(
 
         await userRepository.AddAsync(newUser, cancellationToken);
 
-        return Result.Success(newUser.Id);
+        return newUser.Id;
     }
 }

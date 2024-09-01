@@ -1,5 +1,6 @@
 ﻿using CleanSheet.Application.Features.Auth.Commands.Login;
 using CleanSheet.Application.Features.Users.Commands.Create;
+using CleanSheet.Domain.Abstractions;
 using CleanSheet.Domain.Errors;
 using FluentAssertions;
 
@@ -20,7 +21,7 @@ public class LoginTests(IntegrationTestWebAppFactory factory)
 
         // Assert
         result.IsSuccess.Should().BeTrue();
-        result.Error.Should().BeNull();
+        result.Error.Should().Be(Error.None);
         result.Value?.Token.Should().NotBeNull();
     }
 
@@ -37,8 +38,7 @@ public class LoginTests(IntegrationTestWebAppFactory factory)
         var result = await Sender.Send(command);
 
         // Assert
-        result.IsSuccess.Should().BeFalse();
+        result.IsFailure.Should().BeTrue();
         result.Error.Should().Be(AuthErrors.InvalidCredentials);
-        result.Value.Should().BeNull();
     }
 }
