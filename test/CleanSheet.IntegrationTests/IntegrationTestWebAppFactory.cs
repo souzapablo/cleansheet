@@ -1,5 +1,4 @@
 ﻿using CleanSheet.Domain.Entities;
-using CleanSheet.Domain.Enums;
 using CleanSheet.Infrastructure;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -56,20 +55,17 @@ public class IntegrationTestWebAppFactory : WebApplicationFactory<Program>, IAsy
     {
         List<InitialTeam> initialTeams =
         [
-            new("test-team", "Test Team Arena", "Test Team",
-            [
-                new("Test Player 1", 1, 80, new DateOnly(2000, 09, 12), PlayerPosition.Gk),
-                new("Test Player 1", 10, 99, new DateOnly(1980, 12, 12), PlayerPosition.Cam),
-                new("Test Player 1", 11, 80, new DateOnly(2004, 05, 15), PlayerPosition.St),
-            ]),
-            new("empty-test-team", "Empty Test Team Arena", "Empty Test Team", [])
+            Data.PopulatedInitialTeam,
+            Data.EmptyInitialTeam
+        ];
+        
+        List<User> users =
+        [
+            Data.UserWithCareers,
+            Data.UserWithNoCareers
         ];
 
-        List<User> users = [new User("test@user.com", "Test@1234"), new User("testNew@user.com", "Test@1234")];
-
-        var career = Career.Create(new Manager("Mister", "Manager"), initialTeams[0]);
-
-        users[0].AddCareer(career.Value);
+        Data.UserWithCareers.AddCareer(Data.Career);
 
         if (!dbContext.InitialTeams.Any())
         {

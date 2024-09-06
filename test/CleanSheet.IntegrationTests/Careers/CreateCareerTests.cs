@@ -7,13 +7,13 @@ namespace CleanSheet.IntegrationTests.Careers;
 public class CreateCareerTests(IntegrationTestWebAppFactory factory)
     : BaseIntegrationTest(factory)
 {
-    [Theory(DisplayName = "Create should add a new career to database")]
+    [Theory(DisplayName = "Create a new career to an user")]
     [InlineData("123456789123", "Manager")]
     [InlineData("Mister", "123456789123")]
     public async Task Create_ShouldAdd_NewCareerToDatabase(string firstName, string lastName)
     {
         // Arrange
-        var command = new CreateCareerCommand(1, firstName, lastName, "test-team");
+        var command = new CreateCareerCommand(Data.UserWithCareers.Id, firstName, lastName, Data.PopulatedInitialTeam.Slug);
 
         // Act
         var result = await Sender.Send(command);
@@ -24,7 +24,7 @@ public class CreateCareerTests(IntegrationTestWebAppFactory factory)
         result.Value.Should().BeGreaterThan(0);
     }
 
-    [Theory(DisplayName = "Create should return error given invalid input")]
+    [Theory(DisplayName = "Fail to create manager with big and small names")]
     [InlineData("m", "m")]
     [InlineData("mister", "m")]
     [InlineData("marvellouslyd", "manager")]
@@ -32,7 +32,7 @@ public class CreateCareerTests(IntegrationTestWebAppFactory factory)
     public async Task Create_ShouldReturnError_GivenInvalidInput(string firstName, string lastName)
     {
         // Arrange
-        var command = new CreateCareerCommand(1, firstName, lastName, "test-team");
+        var command = new CreateCareerCommand(Data.UserWithCareers.Id, firstName, lastName, Data.PopulatedInitialTeam.Slug);
 
         // Act
         var result = await Sender.Send(command);
@@ -42,11 +42,11 @@ public class CreateCareerTests(IntegrationTestWebAppFactory factory)
         result.Error.Should().Be(IValidationResult.ValidationError);
     }
 
-    [Fact(DisplayName = "Create should return error given user is not found")]
+    [Fact(DisplayName = "Fail to find user")]
     public async Task Create_ShouldReturn_UserNotFound_GivenUserNotFound()
     {
         // Arrange
-        var command = new CreateCareerCommand(-1, "Mister", "Manager", "initial-team");
+        var command = new CreateCareerCommand(Data.InvalidId, "Mister", "Manager", "initial-team");
 
         // Act
         var result = await Sender.Send(command);
@@ -56,11 +56,11 @@ public class CreateCareerTests(IntegrationTestWebAppFactory factory)
         result.Error.Should().Be(UserErrors.NotFound);
     }
 
-    [Fact(DisplayName = "Create should return error given initial team is not found")]
+    [Fact(DisplayName = "Fail to find initial team")]
     public async Task Create_ShouldReturn_InitialTeamNotFound_GivenUserNotFound()
     {
         // Arrange
-        var command = new CreateCareerCommand(1, "Mister", "Manager", "other-initial-team");
+        var command = new CreateCareerCommand(Data.UserWithCareers.Id, "Mister", "Manager", "other-initial-team");
 
         // Act
         var result = await Sender.Send(command);
@@ -70,11 +70,11 @@ public class CreateCareerTests(IntegrationTestWebAppFactory factory)
         result.Error.Should().Be(InitialTeamErrors.NotFound);
     }
 
-    [Fact(DisplayName = "Create should return error given initial team is not found")]
+    [Fact(DisplayName = "Initial team has no initial squad")]
     public async Task Create_ShouldReturn_EmptyInitialSquad_GivenEmptySquad()
     {
         // Arrange
-        var command = new CreateCareerCommand(1, "Mister", "Manager", "empty-test-team");
+        var command = new CreateCareerCommand(Data.UserWithCareers.Id, "Mister", "Manager", Data.EmptyInitialTeam.Slug);
 
         // Act
         var result = await Sender.Send(command);

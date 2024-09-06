@@ -8,11 +8,11 @@ namespace CleanSheet.IntegrationTests.Careers;
 public class ListCareerTests(IntegrationTestWebAppFactory factory)
     : BaseIntegrationTest(factory)
 {
-    [Fact(DisplayName = "List careers when user have any career")]
+    [Fact(DisplayName = "List user careers")]
     public async Task List_ShouldHaveCareers_GivenUserHaveAnyCareer()
     {
         // Arrange
-        var query = new ListCareersQuery(1);
+        var query = new ListCareersQuery(Data.UserWithCareers.Id);
 
         // Act
         var result = await Sender.Send(query);
@@ -23,11 +23,11 @@ public class ListCareerTests(IntegrationTestWebAppFactory factory)
         result.Value.Should().NotBeEmpty();
     }
 
-    [Fact(DisplayName = "List should be empty when user have no careers")]
+    [Fact(DisplayName = "List empty careers")]
     public async Task List_ShouldBeEmpty_GivenUserHaveNoCareer()
     {
         // Arrange
-        var query = new ListCareersQuery(2);
+        var query = new ListCareersQuery(Data.UserWithNoCareers.Id);
 
         // Act
         var result = await Sender.Send(query);
@@ -38,11 +38,11 @@ public class ListCareerTests(IntegrationTestWebAppFactory factory)
         result.Value.Should().BeEmpty();
     }
 
-    [Fact(DisplayName = "Error given user is not registered")]
+    [Fact(DisplayName = "Fail to find user")]
     public async Task List_ShouldReturnError_GivenUserIsNotFound()
     {
         // Arrange
-        var query = new ListCareersQuery(-1);
+        var query = new ListCareersQuery(Data.InvalidId);
 
         // Act
         var result = await Sender.Send(query);
