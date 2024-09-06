@@ -54,20 +54,31 @@ public class IntegrationTestWebAppFactory : WebApplicationFactory<Program>, IAsy
 
     private static async Task SeedDatabaseAsync(CleanSheetDbContext dbContext)
     {
-        if (!dbContext.InitialTeams.Any())
-        {
-            dbContext.InitialTeams.AddRange(new InitialTeam("test-team", "Test Team Arena", "Test Team",
+        List<InitialTeam> initialTeams =
+        [
+            new("test-team", "Test Team Arena", "Test Team",
             [
                 new("Test Player 1", 1, 80, new DateOnly(2000, 09, 12), PlayerPosition.Gk),
                 new("Test Player 1", 10, 99, new DateOnly(1980, 12, 12), PlayerPosition.Cam),
                 new("Test Player 1", 11, 80, new DateOnly(2004, 05, 15), PlayerPosition.St),
             ]),
-            new InitialTeam("empty-test-team", "Empty Test Team Arena", "Empty Test Team", []));
+            new("empty-test-team", "Empty Test Team Arena", "Empty Test Team", [])
+        ];
+
+        List<User> users = [new User("test@user.com", "Test@1234"), new User("testNew@user.com", "Test@1234")];
+
+        var career = Career.Create(new Manager("Mister", "Manager"), initialTeams[0]);
+
+        users[0].AddCareer(career.Value);
+
+        if (!dbContext.InitialTeams.Any())
+        {
+            dbContext.InitialTeams.AddRange(initialTeams);
         }
 
         if (!dbContext.Users.Any())
         {
-            dbContext.Users.Add(new User("test@user.com", "Test@1234"));
+            dbContext.Users.AddRange(users);
         }
 
         await dbContext.SaveChangesAsync();

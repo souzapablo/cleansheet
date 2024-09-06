@@ -3,8 +3,8 @@ using CleanSheet.Domain.Abstractions;
 using CleanSheet.Domain.Errors;
 using FluentAssertions;
 
-namespace CleanSheet.IntegrationTests.UserTests;
-public class CreateUserTests(IntegrationTestWebAppFactory factory) 
+namespace CleanSheet.IntegrationTests.Users;
+public class CreateUserTests(IntegrationTestWebAppFactory factory)
     : BaseIntegrationTest(factory)
 {
     [Fact(DisplayName = "Create should add a new user to database")]
@@ -52,4 +52,3 @@ public class CreateUserTests(IntegrationTestWebAppFactory factory)
         result.Error.Should().Be(UserErrors.EmailAlreadyRegistered);
     }
 }
- 

@@ -3,7 +3,7 @@ using CleanSheet.Domain.Abstractions;
 using CleanSheet.Domain.Errors;
 using FluentAssertions;
 
-namespace CleanSheet.IntegrationTests.Career;
+namespace CleanSheet.IntegrationTests.Careers;
 public class CreateCareerTests(IntegrationTestWebAppFactory factory)
     : BaseIntegrationTest(factory)
 {

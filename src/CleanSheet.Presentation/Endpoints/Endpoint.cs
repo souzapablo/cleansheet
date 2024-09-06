@@ -25,7 +25,8 @@ public static class Endpoint
         endpoints.MapGroup("v1/careers")
             .WithTags("Careers")
             .RequireAuthorization()
-            .MapEndpoint<CreateCareerEndpoint>();
+            .MapEndpoint<CreateCareerEndpoint>()
+            .MapEndpoint<ListUserCareersEndpoint>();
 
         endpoints.MapGroup("v1/auth")
             .WithTags("Auth")
