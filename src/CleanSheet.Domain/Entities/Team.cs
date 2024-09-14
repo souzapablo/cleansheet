@@ -45,4 +45,7 @@ public class Team : Entity
 
     public void AddMatch(Match match) =>
         _matches.Add(match);
+
+    public void AddOpponent(Opponent opponent) =>
+        _opponents.Add(opponent);
 }

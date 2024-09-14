@@ -67,6 +67,10 @@ public class IntegrationTestWebAppFactory : WebApplicationFactory<Program>, IAsy
 
         Data.UserWithCareers.AddCareer(Data.Career);
 
+        Data.Team.AddOpponent(Data.Opponent);
+
+        Data.Career.AddTeam(Data.Team);
+
         if (!dbContext.InitialTeams.Any())
         {
             dbContext.InitialTeams.AddRange(initialTeams);
@@ -75,6 +79,11 @@ public class IntegrationTestWebAppFactory : WebApplicationFactory<Program>, IAsy
         if (!dbContext.Users.Any())
         {
             dbContext.Users.AddRange(users);
+        }
+
+        if (!dbContext.Teams.Any())
+        {
+            dbContext.Teams.Add(Data.Team);
         }
 
         await dbContext.SaveChangesAsync();

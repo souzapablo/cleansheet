@@ -23,4 +23,7 @@ public static class Data
 
     public static Manager CareerManager { get; } = new("Mister", "Manager");
     public static Career Career { get; } = Career.Create(CareerManager, PopulatedInitialTeam).Value;
+
+    public static Opponent Opponent { get; } = new("Opponent", "Opponent Stadium");
+    public static Team Team { get; } = Team.CreateInitialTeam(PopulatedInitialTeam).Value;
 }
