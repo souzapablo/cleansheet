@@ -33,7 +33,7 @@ public class Match : Entity
     public Competition Competition { get; private set; }
     public string Stadium { get; private set; } = string.Empty;
 
-    public Result DetermineStadium(Team team, string? stadium)
+    public Result DetermineStadium(Team team, string? stadium = null)
     {
         if (string.IsNullOrWhiteSpace(stadium) && Location.Equals(MatchLocation.Neutral))
             return Abstractions.Result.Failure(MatchErrors.UndefinedNeutralStadium);
