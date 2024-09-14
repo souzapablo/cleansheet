@@ -10,6 +10,10 @@ public class CleanSheetDbContext(
     public DbSet<Team> Teams { get; set; }
     public DbSet<Player> Players { get; set; }
     public DbSet<InitialTeam> InitialTeams { get; set; }
+    public DbSet<Match> Matches { get; set; }
+    public DbSet<Opponent> Opponents { get; set; }
+    public DbSet<Goal> Goals { get; set; }
+    public DbSet<Assist> Assists { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

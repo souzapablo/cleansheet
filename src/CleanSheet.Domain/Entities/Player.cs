@@ -4,6 +4,10 @@ using CleanSheet.Domain.Enums;
 namespace CleanSheet.Domain.Entities;
 public class Player : Entity
 {
+    private readonly List<Goal> _goals = [];
+    private readonly List<Assist> _assists = [];
+    private readonly List<Match> _matches = [];
+
     protected Player() { }
     public Player(string name, int kitNumber, int overall, DateOnly birthday, PlayerPosition position)
     {
@@ -19,4 +23,7 @@ public class Player : Entity
     public int Overall { get; private set; }
     public DateOnly Birthday { get; private set; }
     public PlayerPosition Position { get; private set; }
+    public IReadOnlyCollection<Goal> Goals => _goals;
+    public IReadOnlyCollection<Assist> Assists => _assists;
+    public IReadOnlyCollection<Match> Matches => _matches;
 }
