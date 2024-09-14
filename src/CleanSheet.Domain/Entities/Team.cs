@@ -42,4 +42,7 @@ public class Team : Entity
 
         return team;
     }
+
+    public void AddMatch(Match match) =>
+        _matches.Add(match);
 }

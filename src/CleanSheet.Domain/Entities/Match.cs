@@ -1,5 +1,6 @@
 ﻿using CleanSheet.Domain.Abstractions;
 using CleanSheet.Domain.Enums;
+using CleanSheet.Domain.Errors;
 
 namespace CleanSheet.Domain.Entities;
 public class Match : Entity
@@ -10,13 +11,12 @@ public class Match : Entity
     protected Match() { }
 
     public Match(Opponent opponent, MatchLocation location, DateOnly date,
-        Competition competition, string stadium)
+        Competition competition)
     {
         Opponent = opponent;
         Location = location;
         Date = date;
         Competition = competition;
-        Stadium = stadium;
     }
 
     public long TeamId { get; private set; }
@@ -32,4 +32,20 @@ public class Match : Entity
     public MatchResult Result { get; private set; }
     public Competition Competition { get; private set; }
     public string Stadium { get; private set; } = string.Empty;
+
+    public Result DetermineStadium(Team team, string? stadium)
+    {
+        if (string.IsNullOrWhiteSpace(stadium) && Location.Equals(MatchLocation.Neutral))
+            return Abstractions.Result.Failure(MatchErrors.UndefinedNeutralStadium);
+
+        Stadium = Location switch
+        {
+            MatchLocation.Home => team.Stadium,
+            MatchLocation.Away => Opponent.Stadium,
+            MatchLocation.Neutral => stadium ?? string.Empty,
+            _ => throw new ArgumentOutOfRangeException()
+        };
+
+        return Abstractions.Result.Success();
+    }
 }

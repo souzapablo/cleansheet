@@ -1,6 +1,7 @@
 ﻿using CleanSheet.Presentation.Abstractions;
 using CleanSheet.Presentation.Endpoints.Auth;
 using CleanSheet.Presentation.Endpoints.Careers;
+using CleanSheet.Presentation.Endpoints.Matches;
 using CleanSheet.Presentation.Endpoints.Users;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
@@ -31,6 +32,10 @@ public static class Endpoint
         endpoints.MapGroup("v1/auth")
             .WithTags("Auth")
             .MapEndpoint<LoginEndpoint>();
+
+        endpoints.MapGroup("v1/matches")
+            .WithTags("Matches")
+            .MapEndpoint<CreateMatchEndpoint>();
     }
     
     private static IEndpointRouteBuilder MapEndpoint<TEndpoint>(this IEndpointRouteBuilder app)

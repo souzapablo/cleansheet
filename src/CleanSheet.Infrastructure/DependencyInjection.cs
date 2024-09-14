@@ -33,6 +33,9 @@ public static class DependencyInjection
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<ICareerRepository, CareerRepository>();
         services.AddScoped<IInitialTeamRepository, InitialTeamRepository>();
+        services.AddScoped<ITeamRepository, TeamRepository>();
+        services.AddScoped<IOpponentRepository, OpponentRepository>();
+        services.AddScoped<IMatchRepository, MatchRepository>();
     }
 
     private static void AddSecurity(this IServiceCollection services)
